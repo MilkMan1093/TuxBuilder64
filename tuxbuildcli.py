@@ -334,7 +334,7 @@ def saturnsel():
         time.sleep(3)
         os.system("git clone https://github.com/Llennpie/Saturn --branch legacy")
         print("Copying baserom....")
-        os.system("cp /home/$USER/baserom.us.z64 /home/$USER/TuxBuilder64/Render96ex/baserom.us.z64")
+        os.system("cp /home/$USER/baserom.us.z64 /home/$USER/TuxBuilder64/Saturn/baserom.us.z64")
         print("Baserom copied!")
         time.sleep(2)
         buildspeed1 = input('''Now, it comes to building the game. How fast do you want the game to build?
