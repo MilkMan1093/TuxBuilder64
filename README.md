@@ -10,4 +10,4 @@ Having trouble building the Super Mario 64 PC Port on Linux? Maybe the dependenc
 
 Step 1: Download the script.
 
-```wget https://github.com/MilkMan1093/TuxBuilder64```
+```wget https://github.com/MilkMan1093/TuxBuilder64 && cd TuxBuilder64 && chmod +x tuxbuildcli.py```
