@@ -9,15 +9,15 @@ print(f"{Fore.GREEN}GREEN text means general comments.")
 print(f"{Fore.BLUE}BLUE text indicates user input.\n")
 time.sleep(2)
 
-print(f"{Fore.GREEN}TuxBuilderCLI: A tool to easily build the SM64 PC Port without fuss.")
+print(f"{Fore.GREEN}TuxBuilderCLI: A tool to easily build the SM64 PC Port without fuss. \n")
 
 
 def dependencies():
     distropkgmgr = input(f'''{Fore.CYAN}Select your distribution's package manager-\n
     1. APT (Debian, Ubuntu , Zorin OS, elementaryOS, Linux Mint, Pop!_OS and the other 1920839840938290 Ubuntu-based distros)
-    2. Pacman (Arch, Manjaro, EndeavourOS, Garuda etc.)
+    2. Pacman (Arch, Manjaro, EndeavourOS, Garuda, blendOS, pearOS Nicec0re etc.)
     3. XBPS-install (Void Linux)
-    4. DNF (Fedora) 
+    4. DNF (Fedora, Nobara, RisiOS etc.) 
     --->  ''')
     if distropkgmgr == "APT" or "apt" or "1":
         os.system("sudo apt install build-essential git python3 libglew-dev libsdl2-dev curl libcurl4-gnutls-dev libjsoncpp-dev")
@@ -27,17 +27,12 @@ def dependencies():
         os.system("sudo xbps-install -S base-devel git curl python3 SDL2-devel glew-devel")
     elif distropkgmgr == "DNF" or "dnf":
         os.system("sudo dnf install make gcc python3 glew-devel SDL2-devel")
-    elif distropkgmgr == "slackware" or "      ":
-        print(":( sorry")
-    else:
-        print("Invalid")
 
 dependencies()
 
 def reposelect():
     global repo
-    print("\n")
-    repo = input(f'''{Fore.BLUE}Select the repository you would like to build today. - \n
+    repo = input('''Select the repository you would like to build today. - \n
     You have a choice of:
     1. Render96ex (alpha, master, tester, tester_rt64alpha)
     2. SM64ex (nightly, master, coop, alo and more to come!)
@@ -163,6 +158,8 @@ def render96sel():
                 os.system("make -j8")
             elif pleaseconfirm == "no":
                 render96sel()
+        else:
+            print(f"{Fore.RED}Invalid Option")
     elif confirmation == "n":
         reposelect()
 
@@ -170,11 +167,11 @@ def sm64exsel():
     smexconf = input("\nYou have selected SM64ex.\nIs the above selection correct (y,n) ")
     if smexconf == "y":
         branchsmex = input('''Which branch to clone and build? \n
-        1. Nightly (recommended)
-        2. Master (alright, I guess)
-        3. Coop (play with friends! I built this branch myself, now all I need are friends! :DDD... oh wait-)
-        4. Alo (Honestly don't know what the difference is, but I'm sure it's good!)
-        5. There are WAYYY too many SM64ex branches. This is only an alpha build. More to come! ''')
+        1. Nightly (Good enough for daily players)
+        2. Master (Outdated, recommended to use any other branch..)
+        3. Coop (Puts a spin on the game. In this fork, you can now play with friends.)
+        4. Alo (Adds quality-of-life fixes to the game like adding Puppycam, revamping the Pause Menu and many other improvements.)
+        5. There are more branches to come. Stay tuned for more of your favourite branches. ''')
         if branchsmex == "1":
             print("\nCopy your baserom to your home folder and rename it to baserom.us.z64.\n")
             time.sleep(3)
@@ -279,6 +276,9 @@ def sm64exsel():
             elif buildspeed1 == "4":
                 os.chdir("sm64ex-alo")
                 os.system("make -j8")
+            
+        else:
+            print(f"{Fore.RED}Invalid Option")
     elif smexconf == "n":
         reposelect()
 
@@ -340,10 +340,12 @@ def sm64rtsel():
             elif buildspeed1 == "4":
                 os.chdir("sm64rt")
                 os.system("make -j8")
+        else:
+            print(f"{Fore.RED}Invalid Option")
 
 def saturnsel():
-    saturnconfirm = input("You have selected Saturn. Nifty little repository for copying SMG4- just kidding! Are you sure you want to select this repository? Input yes or no, but NOT y or n. sS")
-    if saturnconfirm == "yes":
+    saturnconfirm = input("You have selected Saturn. \nIs the above selection correct? (y,n) ")
+    if saturnconfirm == "y":
         print("\nPut your Super Mario 64 baserom in your home folder andrename it to baserom.us.z64\n")
         time.sleep(3)
         os.system("git clone https://github.com/Llennpie/Saturn --branch legacy")
@@ -372,8 +374,10 @@ def saturnsel():
         elif buildspeed1 == "4":
             os.chdir("Saturn")
             os.system("make -j8")
-    elif saturnconfirm == "no":
+    elif saturnconfirm == "n":
         reposelect()
+    else:
+        print(f"{Fore.RED}Invalid Option")
 
 
 if repo == "1":
@@ -385,6 +389,7 @@ elif repo == "3":
 elif repo == "4":
     saturnsel()
 else:
-    print("Invalid input. Try again and restart the script. \n")
+    print("Invalid input. Try again. \n")
+    reposelect()
 
 print(f"{Fore.RED}If you encounter any problems in building, try again, and follow the instructions properly.")
