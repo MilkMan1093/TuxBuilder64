@@ -1,6 +1,6 @@
 # TuxBuilder64
 
-![alt text](https://i.imgur.com/Vp862fo.png)
+![alt text](https://i.imgur.com/bjVL2Pe.png)
 
 A Python-built Super Mario 64 PC port builder for Linux.
 
