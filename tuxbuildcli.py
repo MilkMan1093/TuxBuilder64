@@ -14,21 +14,45 @@ print(f"{Fore.GREEN}TuxBuilderCLI: A tool to easily build the SM64 PC Port witho
 
 def dependencies():
     distropkgmgr = input(f'''{Fore.CYAN}Select your distribution's package manager-\n
-    1. APT (Debian, Ubuntu , Zorin OS, elementaryOS, Linux Mint, Pop!_OS and the other 1920839840938290 Ubuntu-based distros)
+    1. APT (Debian, Ubuntu , Zorin OS, elementaryOS, Linux Mint, Pop!_OS and the other bajillion Ubuntu-based distros)
     2. Pacman (Arch, Manjaro, EndeavourOS, Garuda, blendOS, pearOS Nicec0re etc.)
     3. XBPS-install (Void Linux)
     4. DNF (Fedora, Nobara, RisiOS etc.) 
+    5. Skip (Select if you have already installed the dependencies for your distribution.)
     --->  ''')
-    if distropkgmgr == "APT" or "apt" or "1":
+    if distropkgmgr == "1":
         os.system("sudo apt install build-essential git python3 libglew-dev libsdl2-dev curl libcurl4-gnutls-dev libjsoncpp-dev")
-    elif distropkgmgr == "Pacman" or "pacman" or "2":
+    elif distropkgmgr == "2":
         os.system("sudo pacman -S base-devel python sdl2 glew curl")
-    elif distropkgmgr == "XBPS" or "xbps" or "XBPS-install" or "xbps-install":
+    elif distropkgmgr == "3":
         os.system("sudo xbps-install -S base-devel git curl python3 SDL2-devel glew-devel")
-    elif distropkgmgr == "DNF" or "dnf":
+    elif distropkgmgr == "4":
         os.system("sudo dnf install make gcc python3 glew-devel SDL2-devel")
+    elif distropkgmgr == "5":
+        p = input(f"{Fore.BLUE}Have you installed the dependencies for your distribution yet? (y,n) ")
+        if p == "y":
+            print("Noted. Skipping...")
+            time.sleep(2)
+        elif p == "n":
+            print("Gotcha. Reverting back to dependency manager.")
+            dependencies()
 
 dependencies()
+
+time.sleep(1)
+print("Building the game requires a baserom to extract assets from. If you don't have a baserom yet, obtain one now.")
+time.sleep(2)
+def bromobtain():
+    brom = input("Have you obtained a baserom yet? (y,n)")
+    if brom == "y":
+        print("Fantastic. Place the baserom in your home folder and rename it to 'baserom.us.z64'. Don't worry, I won't ask where it came from ;) ")
+        dependencies()
+    elif brom == "n":
+        print("The script will loop this question until you have obtained your baserom.")
+        time.sleep(2)
+        return bromobtain()
+    time.sleep(3)
+
 
 def reposelect():
     global repo
@@ -43,15 +67,16 @@ def reposelect():
 reposelect()
 
 def render96sel():
-    confirmation = input(f"\n{Fore.BLUE}You have selected Render96ex.\nIs the above selection correct? (y,n) ")
+    print(f"\n{Fore.GREEN}You have selected Render96ex.")
+    confirmation = input(f"\n{Fore.BLUE}Is the above selection correct? (y,n) ")
     if confirmation == "y":
         branchren96 = input(f'''\n{Fore.BLUE}Select the branch to be built. (Render96ex) \n
         1. Master (old, outdated)
         2. Alpha (best choice for regular players)
         3. Tester (bleeding edge features and bugfixes)
-        4. Tester_RT64Alpha (Don't use if you run open-source drivers, like Nouveau.) \n''')
+        4. Tester_RT64Alpha (Don't use if your GPU doesn't support Ray Tracing. If it does don't use open-source drivers, like Nouveau.) \n''')
         if branchren96 == "1":
-            print("\nCopy your baserom to your home folder and rename it to baserom.us.z64.\n")
+            print("\nConfirm you have copied baserom.us.z64 to your home folder.\n")
             time.sleep(3)
             os.system("git clone https://github.com/Render96/Render96ex --branch master")
             print("Copying baserom....")
@@ -77,7 +102,7 @@ def render96sel():
                 os.chdir("Render96ex")
                 os.system("make -j8")
         elif branchren96 == "2":
-            print("\nCopy your baserom to your home folder and rename it to baserom.us.z64.\n")
+            print("\nConfirm you have copied baserom.us.z64 to your home folder.\n")
             time.sleep(3)
             os.system("git clone https://github.com/Render96/Render96ex --branch alpha")
             print("Copying baserom....")
@@ -103,7 +128,7 @@ def render96sel():
                 os.chdir("Render96ex")
                 os.system("make -j8")
         elif branchren96 == "3":
-            print("\nCopy your baserom to your home folder and rename it to baserom.us.z64.\n")
+            print("\nConfirm you have copied baserom.us.z64 to your home folder.\n")
             time.sleep(3)
             os.system("git clone https://github.com/Render96/Render96ex --branch tester")
             print("Copying baserom....")
@@ -131,12 +156,18 @@ def render96sel():
         elif branchren96 == "4":
             pleaseconfirm = input(f"{Fore.RED}|WARNING| You have selected the RT64 branch. Is this correct?  ")
             if pleaseconfirm == "y":
-                print("\nCopy your baserom to your home folder and rename it to baserom.us.z64.")
+                print("\nConfirm you have copied baserom.us.z64 to your home folder.")
                 time.sleep(3)
                 os.system("git clone https://github.com/Render96/Render96ex --branch tester_rt64alpha")
                 print("Copying baserom....")
                 os.system("cp /home/$USER/baserom.us.z64 /home/$USER/TuxBuilder64/Render96ex/baserom.us.z64")
                 print("Baserom copied.\n")
+            elif pleaseconfirm == "n":
+                print("THat was almost a disaster. Reverting back to Render96ex branch selection...")
+                render96sel()
+            else:
+                print("Invalid option. Reverting back to Render96ex branch selection.")
+                render96sel()
             time.sleep(2)
             buildspeed1 = input(f'''{Fore.BLUE}The repository has been cloned and the baserom has been successfully copied. Select the speed by which to build the game.
             1. Slow (-j2)
@@ -164,7 +195,8 @@ def render96sel():
         reposelect()
 
 def sm64exsel():
-    smexconf = input("\nYou have selected SM64ex.\nIs the above selection correct (y,n) ")
+    print(f"\n{Fore.GREEN}You have selected SM64ex.")
+    smexconf = input(f"\n{Fore.BLUE}Is the above selection correct (y,n) ")
     if smexconf == "y":
         branchsmex = input('''Which branch to clone and build? \n
         1. Nightly (Good enough for daily players)
@@ -173,7 +205,7 @@ def sm64exsel():
         4. Alo (Adds quality-of-life fixes to the game like adding Puppycam, revamping the Pause Menu and many other improvements.)
         5. There are more branches to come. Stay tuned for more of your favourite branches. ''')
         if branchsmex == "1":
-            print("\nCopy your baserom to your home folder and rename it to baserom.us.z64.\n")
+            print("\nConfirm you have copied baserom.us.z64 to your home folder.\n")
             time.sleep(3)
             os.system("git clone https://github.com/sm64pc/sm64ex --branch nightly")
             print("Copying baserom....")
@@ -199,7 +231,7 @@ def sm64exsel():
                 os.chdir("sm64ex")
                 os.system("make -j8")
         elif branchsmex == "2":
-            print("\nCopy your baserom to your home folder and rename it to baserom.us.z64.\n")
+            print("\nConfirm you have copied baserom.us.z64 to your home folder.\n")
             time.sleep(3)
             os.system("git clone https://github.com/sm64pc/sm64ex --branch master")
             print("Copying baserom....")
@@ -225,7 +257,7 @@ def sm64exsel():
                 os.chdir("sm64ex")
                 os.system("make -j8")
         elif branchsmex == "3":
-            print("\nCopy your baserom to your home folder and rename it to baserom.us.z64.")
+            print("\nConfirm you have copied baserom.us.z64 to your home folder.")
             time.sleep(3)
             os.system("git clone https://github.com/djoslin0/sm64ex-coop")
             print("Copying baserom....")
@@ -251,7 +283,7 @@ def sm64exsel():
                 os.chdir("sm64ex-coop")
                 os.system("make -j8")
         elif branchsmex == "4":
-            print("\nCopy your baserom to your home folder and rename it to baserom.us.z64.\n")
+            print("\nConfirm you have copied baserom.us.z64 to your home folder.\n")
             time.sleep(3)
             os.system("git clone https://github.com/AloXado320/sm64ex-alo")
             print("Copying baserom....")
@@ -289,7 +321,7 @@ def sm64rtsel():
         1. Master
         2. fsr''')
         if branchsm64rt == "1":
-            print("\nCopy your baserom to your home folder and rename it to baserom.us.z64.\n")
+            print("\nConfirm you have copied baserom.us.z64 to your home folder.\n")
             time.sleep(3)
             os.system("git clone https://github.com/DarioSamo/sm64rt --branch master")
             print("Copying baserom....")
@@ -315,7 +347,7 @@ def sm64rtsel():
                 os.chdir("sm64rt")
                 os.system("make -j8 RENDER_API=RT64 EXTERNAL_DATA=1")
         elif branchsm64rt == "2":
-            print("\nCopy your baserom to your home folder and rename it to baserom.us.z64.\n")
+            print("\nConfirm you have copied baserom.us.z64 to your home folder.\n")
             time.sleep(3)
             os.system("git clone https://github.com/DarioSamo/sm64rt --branch fsr")
             print("Copying baserom....")
